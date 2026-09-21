@@ -1,4 +1,5 @@
 import React,{useEffect,useState} from 'react';
+import "./style.css";
 import {marked} from 'marked'; import DOMPurify from 'dompurify'; import {api} from './services/api'; import type {Session,Message,Source} from './types'; import './style.css';
 export default function App(){const [sessions,setSessions]=useState<Session[]>([]),[sid,setSid]=useState(''),[msgs,setMsgs]=useState<Message[]>([]),[input,setInput]=useState(''),[busy,setBusy]=useState(false),[artifact,setArtifact]=useState<any>(null),[model,setModel]=useState<any>(null),[error,setError]=useState('');
  const refresh=async()=>{try{const s=await api.sessions();setSessions(s);if(!sid&&s[0])setSid(s[0].id);setModel(await api.model())}catch(e:any){setError(e.message)}};

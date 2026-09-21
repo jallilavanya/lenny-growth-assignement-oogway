@@ -1,0 +1,4 @@
+import type {Session,Message,Source} from '../types';
+const API=import.meta.env.VITE_API_URL||'http://localhost:8000';
+async function req(path:string,init?:RequestInit){const r=await fetch(API+path,{headers:{'Content-Type':'application/json',...(init?.headers||{})},...init}); const d=await r.json(); if(!r.ok) throw new Error(d.error?.message||'Request failed'); return d;}
+export const api={sessions:()=>req('/api/sessions') as Promise<Session[]>,create:(title='New Chat')=>req('/api/sessions',{method:'POST',body:JSON.stringify({title})}) as Promise<Session>,messages:(id:string)=>req(`/api/sessions/${id}/messages`) as Promise<Message[]>,ask:(id:string,content:string)=>req(`/api/sessions/${id}/ask`,{method:'POST',body:JSON.stringify({content})}) as Promise<{answer:string;sources:Source[];route:string;artifact_id?:string}>,artifact:(id:string)=>req(`/api/artifacts/${id}`),model:()=>req('/api/settings/model')};
